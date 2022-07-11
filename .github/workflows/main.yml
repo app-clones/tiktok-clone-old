@@ -1,0 +1,34 @@
+name: Node.js CI
+
+on:
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
+
+jobs:
+    build:
+        runs-on: ${{ matrix.os }}
+
+        strategy:
+            matrix:
+                node-version: [16.x, 17.x, 18.x]
+                os: [ubuntu-latest, windows-latest, macOS-latest]
+
+        name: Build on ${{ matrix.os }} with Node ${{ matrix.node-version }}
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+
+            - name: Install Dependencies
+              run: npm install -g @sanity/cli && yarn install && cd sanity backend && yarn build
+
+            - name: Build Next.js App
+              run: yarn build
+
+            - name: Build Sanity Project
+              run: cd sanity-backend && yarn build
