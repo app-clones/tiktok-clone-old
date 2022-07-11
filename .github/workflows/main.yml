@@ -36,18 +36,14 @@ jobs:
                   restore-keys: |
                       ${{ runner.os }}-yarn-
 
-            - name: Get npm cache directory
-              id: npm-cache-dir
-              run: |
-                  echo "::set-output name=dir::$(cd sanity-backend && npm config get cache)"
-
-            - uses: actions/cache@v3
-              id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+            - uses: actions/cache@v2
               with:
-                  path: ${{ steps.npm-cache-dir.outputs.dir }}
-                  key: ${{ runner.os }}-node-${{ hashFiles('sanity-backend/package-lock.json') }}
+                  path: |
+                      ${{ steps.yarn-cache-dir-path.outputs.dir }}
+                      ${{ github.workspace }}/.next/cache
+                  key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
                   restore-keys: |
-                      ${{ runner.os }}-node-
+                      ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-
 
             - name: Install Sanity CLI
               run: npm install -g @sanity/cli
@@ -57,8 +53,7 @@ jobs:
               run: yarn install
 
             - name: Install Sanity Dependencies
-              if: steps.npm-cache.outputs.cache-hit != 'true'
-              run: cd sanity-backend && npm install
+              run: cd sanity-backend && sanity install
 
             - name: Build Next.js App
               run: yarn build
