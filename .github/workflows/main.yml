@@ -25,7 +25,7 @@ jobs:
                   node-version: ${{ matrix.node-version }}
 
             - name: Install Dependencies
-              run: npm install -g @sanity/cli && yarn install && cd sanity backend && yarn build
+              run: yarn install && cd sanity-backend && yarn install && npm install -g @sanity/cli
 
             - name: Build Next.js App
               run: yarn build
