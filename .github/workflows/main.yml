@@ -52,10 +52,6 @@ jobs:
             - name: Install Sanity CLI
               run: npm install -g @sanity/cli
 
-            - name: Install Windows Dependency
-              if: runner.os == 'Windows'
-              run: yarn add @next/swc-win32-x64-msvc
-
             - name: Install Nextjs Dependencies
               if: steps.yarn-cache.outputs.cache-hit != 'true'
               run: yarn install
