@@ -31,4 +31,4 @@ jobs:
               run: yarn build
 
             - name: Build Sanity Project
-              run: cd sanity-backend && npm build
+              run: cd sanity-backend && npm run build
