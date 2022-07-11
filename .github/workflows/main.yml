@@ -53,7 +53,7 @@ jobs:
               run: yarn install
 
             - name: Install Sanity Dependencies
-              run: cd sanity-backend && sanity install
+              run: cd sanity-backend && npm install
 
             - name: Build Next.js App
               run: yarn build
